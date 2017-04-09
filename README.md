@@ -1,8 +1,10 @@
-DotNetCraft.Common For .NET
+DotNetCraft.WiseQueue For .NET
 ==========
 
 ## Overview
 
-[![Build Status](https://travis-ci.org/DotNetCraft/DotNetCraft.Common.svg?branch=master)](https://travis-ci.org/DotNetCraft/DotNetCraft.Common) [![License LGPLv3](https://img.shields.io/badge/license-LGPLv3-green.svg)](http://www.gnu.org/licenses/lgpl-3.0.html)
+The project is being created using most effective approaches to software development including latest technologies, powerful methodology and best ideas from different systems designed to manage tasks. With **WiseQueue** you will get a unified application that will provide a simple way to create tasks using **Fire-And-Forget** or **Fire-And-WaitResponse** depending on your needs. 
 
-This is a common library that contain all necessary interfaces and classes that will be used in the future work...
+The application will have support for delayed start of tasks, running tasks according to schedules and running tasks when event happens. Make the most of today while being prepared for the future!
+
+The system will have user friendly interface which will allow you to control and manage tasks’ and servers’ statuses. For instance, you will be able to add more threads(processes) to handle your tasks both automatically and via UI. The client-side will be done using HTML and AngularJS. Server-side will use WebApi+Json. Given that developers will be able to seamlessly integrate the system into their applications.
