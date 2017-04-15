@@ -76,7 +76,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ServerRepository.cs" />
+    <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="Specifications\ExpiredServerSpecification.cs" />
+    <Compile Include="Specifications\NewTaskSpecification.cs" />
     <Compile Include="WiseQueueDataContext.cs" />
     <Compile Include="WiseQueueDataContextFactory.cs" />
     <Compile Include="WiseQueueEntities.cs" />

@@ -8,12 +8,14 @@ using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 using DotNetCraft.Common.Domain.ServiceMessenger;
 using DotNetCraft.Common.NLogger;
 using DotNetCraft.Common.Utils.Logging;
+using DotNetCraft.WiseQueue.Core.Caching;
 using DotNetCraft.WiseQueue.Core.Configurations;
 using DotNetCraft.WiseQueue.Core.Managers;
 using DotNetCraft.WiseQueue.Core.Repositories;
 using DotNetCraft.WiseQueue.DataAccessLayer;
 using DotNetCraft.WiseQueue.DataAccessLayer.Repositories;
 using DotNetCraft.WiseQueue.Domain.Server;
+using DotNetCraft.WiseQueue.MicrosoftExpressionCache;
 using Ninject;
 
 namespace DotNetCraft.WiseQueue.Server
@@ -47,15 +49,18 @@ namespace DotNetCraft.WiseQueue.Server
 
             //Managers
             kernel.Bind<ServerManagerConfiguration>().ToConstant(systemConfiguration.ServerManagerConfiguration);
+            kernel.Bind<TaskManagerConfiguration>().ToConstant(systemConfiguration.TaskManagerConfiguration);
             kernel.Bind<IServerManager>().To<ServerManager>();
+            kernel.Bind<ITaskManager>().To<TaskManager>();
 
             //ServiceMessageProcessor
             kernel.Bind<IServiceMessageProcessor>().To<ServiceMessageProcessor>();
 
+            //CachedExpressionCompiler
+            kernel.Bind<ICachedExpressionCompiler>().To<CachedExpressionCompiler>();
 
-            //IDataContextFactory dataContextFactory = kernel.Get<IDataContextFactory>();
-            //var context = dataContextFactory.CreateDataContext(kernel.Get<IContextSettings>());
-            //dataContextFactory.ReleaseDataContext(context);
+            ITaskManager taskManager = kernel.Get<ITaskManager>();
+            taskManager.Start();
 
             IServerManager serverManager = kernel.Get<IServerManager>();
             serverManager.Start();

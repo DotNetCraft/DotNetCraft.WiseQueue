@@ -11,3 +11,5 @@ src/Core/DotNetCraft.WiseQueue.Core/DotNetCraft.WiseQueue.Core.csproj.user
 *.user
 src/Implementation/DotNetCraft.WiseQueue.Server/bin/
 src/Implementation/DotNetCraft.WiseQueue.Server/obj/
+src/Implementation/DotNetCraft.WiseQueue.MicrosoftExpressionCache/bin/
+src/Implementation/DotNetCraft.WiseQueue.MicrosoftExpressionCache/obj/

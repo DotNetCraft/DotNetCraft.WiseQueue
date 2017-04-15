@@ -110,6 +110,10 @@
       <Project>{DD64A62E-D793-48D4-B176-9C4A22B34244}</Project>
       <Name>DotNetCraft.WiseQueue.Domain.Server</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DotNetCraft.WiseQueue.MicrosoftExpressionCache\DotNetCraft.WiseQueue.MicrosoftExpressionCache.csproj">
+      <Project>{173CCB00-EA7D-4511-9655-F67BC24E4D47}</Project>
+      <Name>DotNetCraft.WiseQueue.MicrosoftExpressionCache</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
