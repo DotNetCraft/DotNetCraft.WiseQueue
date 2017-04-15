@@ -3,8 +3,48 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{ADB93FA7-F47B-48DF-A1DC-DE539310CE56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{E55EED27-D2FD-4094-A395-3C45AF6F56D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.WiseQueue.Core", "src\Core\DotNetCraft.WiseQueue.Core\DotNetCraft.WiseQueue.Core.csproj", "{87E7A531-9FE5-4397-8F8A-29A95B0F9AE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.WiseQueue.DataAccessLayer", "src\Implementation\DotNetCraft.WiseQueue.DataAccessLayer\DotNetCraft.WiseQueue.DataAccessLayer.csproj", "{FAF6C7E1-9575-43DC-8BDB-E37FA01A7329}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.WiseQueue.Domain.Server", "src\Implementation\DotNetCraft.WiseQueue.Domain.Server\DotNetCraft.WiseQueue.Domain.Server.csproj", "{DD64A62E-D793-48D4-B176-9C4A22B34244}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.WiseQueue.Server", "src\Implementation\DotNetCraft.WiseQueue.Server\DotNetCraft.WiseQueue.Server.csproj", "{4A538F1C-6E69-4C29-94C8-73F59E68ECB6}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87E7A531-9FE5-4397-8F8A-29A95B0F9AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E7A531-9FE5-4397-8F8A-29A95B0F9AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E7A531-9FE5-4397-8F8A-29A95B0F9AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E7A531-9FE5-4397-8F8A-29A95B0F9AE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAF6C7E1-9575-43DC-8BDB-E37FA01A7329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAF6C7E1-9575-43DC-8BDB-E37FA01A7329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAF6C7E1-9575-43DC-8BDB-E37FA01A7329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAF6C7E1-9575-43DC-8BDB-E37FA01A7329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD64A62E-D793-48D4-B176-9C4A22B34244}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD64A62E-D793-48D4-B176-9C4A22B34244}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD64A62E-D793-48D4-B176-9C4A22B34244}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD64A62E-D793-48D4-B176-9C4A22B34244}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A538F1C-6E69-4C29-94C8-73F59E68ECB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A538F1C-6E69-4C29-94C8-73F59E68ECB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A538F1C-6E69-4C29-94C8-73F59E68ECB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A538F1C-6E69-4C29-94C8-73F59E68ECB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{87E7A531-9FE5-4397-8F8A-29A95B0F9AE8} = {ADB93FA7-F47B-48DF-A1DC-DE539310CE56}
+		{FAF6C7E1-9575-43DC-8BDB-E37FA01A7329} = {E55EED27-D2FD-4094-A395-3C45AF6F56D7}
+		{DD64A62E-D793-48D4-B176-9C4A22B34244} = {E55EED27-D2FD-4094-A395-3C45AF6F56D7}
+		{4A538F1C-6E69-4C29-94C8-73F59E68ECB6} = {E55EED27-D2FD-4094-A395-3C45AF6F56D7}
 	EndGlobalSection
 EndGlobal

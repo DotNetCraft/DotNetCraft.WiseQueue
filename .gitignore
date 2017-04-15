@@ -1,1 +1,13 @@
 .vs/DotNetCraft.WiseQueue/v14/.suo
+src/Implementation/DotNetCraft.WiseQueue.DataAccessLayer/bin/
+src/Core/DotNetCraft.WiseQueue.Core/obj/
+src/Core/DotNetCraft.WiseQueue.Core/bin/
+src/Implementation/DotNetCraft.WiseQueue.DataAccessLayer/obj/
+src/Implementation/DotNetCraft.WiseQueue.Domain.Server/bin/
+src/Core/DotNetCraft.Common.Core.Server/obj/
+packages/
+src/Implementation/DotNetCraft.WiseQueue.Domain.Server/obj/
+src/Core/DotNetCraft.WiseQueue.Core/DotNetCraft.WiseQueue.Core.csproj.user
+*.user
+src/Implementation/DotNetCraft.WiseQueue.Server/bin/
+src/Implementation/DotNetCraft.WiseQueue.Server/obj/
