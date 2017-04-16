@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DotNetCraft.Common.Core.Attributes;
 using DotNetCraft.Common.Core.Domain.Management;
 
@@ -25,5 +26,7 @@ namespace DotNetCraft.WiseQueue.Core.Configurations
 
         [FieldToString]
         public TimeSpan ServerHeartbeat { get; set; }
+
+        public List<string> Queues { get; set; }
     }
 }

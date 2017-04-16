@@ -22,5 +22,7 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
 
         
         public virtual DbSet<ServerInfo> ServerInfoSet { get; set; }
+
+        public virtual DbSet<TaskInfo> TaskInfoSet { get; set; }
     }
 }

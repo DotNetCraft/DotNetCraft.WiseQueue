@@ -7,7 +7,7 @@ namespace DotNetCraft.WiseQueue.Core.Configurations
     {
         #region Implementation of IManagerConfiguration
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         #endregion
 
@@ -17,8 +17,8 @@ namespace DotNetCraft.WiseQueue.Core.Configurations
 
         public TimeSpan SleepTime { get; set; }
 
-        #endregion
+        #endregion        
 
-        public int MaxProcessingTasks { get; set; }
+        public TaskProcessingConfiguration TaskProcessingConfiguration { get; set; }
     }
 }

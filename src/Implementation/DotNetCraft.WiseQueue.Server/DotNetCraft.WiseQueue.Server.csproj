@@ -37,23 +37,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Core.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Core.Domain.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Core.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Core.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Core.Utils.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Core.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.DataAccessLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.DataAccessLayer.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.DataAccessLayer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Domain.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.NLogger, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -61,7 +61,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Utils.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.ConfigurationParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -105,6 +105,14 @@
     <ProjectReference Include="..\DotNetCraft.WiseQueue.DataAccessLayer\DotNetCraft.WiseQueue.DataAccessLayer.csproj">
       <Project>{FAF6C7E1-9575-43DC-8BDB-E37FA01A7329}</Project>
       <Name>DotNetCraft.WiseQueue.DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetCraft.WiseQueue.Domain.Client\DotNetCraft.WiseQueue.Domain.Client.csproj">
+      <Project>{59CBF79C-5CA8-4193-BECD-18B3EBF4B9F3}</Project>
+      <Name>DotNetCraft.WiseQueue.Domain.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetCraft.WiseQueue.Domain.Common\DotNetCraft.WiseQueue.Domain.Common.csproj">
+      <Project>{C9295BCE-3846-4F4B-A5CF-D984DD39D16B}</Project>
+      <Name>DotNetCraft.WiseQueue.Domain.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\DotNetCraft.WiseQueue.Domain.Server\DotNetCraft.WiseQueue.Domain.Server.csproj">
       <Project>{DD64A62E-D793-48D4-B176-9C4A22B34244}</Project>

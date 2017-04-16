@@ -7,5 +7,7 @@
         public ServerManagerConfiguration ServerManagerConfiguration { get; set; }
 
         public TaskManagerConfiguration TaskManagerConfiguration { get; set; }
+
+        public ClientManagerConfiguration ClientManagerConfiguration { get; set; }        
     }
 }

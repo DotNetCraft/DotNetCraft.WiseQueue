@@ -31,27 +31,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotNetCraft.Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Core.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Core.Domain.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Core.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Core.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Core.Utils.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Core.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.DataAccessLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.DataAccessLayer.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.DataAccessLayer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Domain.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.13\lib\net45\DotNetCraft.Common.Utils.dll</HintPath>
+      <HintPath>..\..\..\packages\DotNetCraft.Common.1.0.15\lib\net45\DotNetCraft.Common.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -79,6 +79,8 @@
     <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="Specifications\ExpiredServerSpecification.cs" />
     <Compile Include="Specifications\NewTaskSpecification.cs" />
+    <Compile Include="Specifications\RunningTaskByServerIdSpecification.cs" />
+    <Compile Include="Specifications\TaskCancellationSpecification.cs" />
     <Compile Include="WiseQueueDataContext.cs" />
     <Compile Include="WiseQueueDataContextFactory.cs" />
     <Compile Include="WiseQueueEntities.cs" />

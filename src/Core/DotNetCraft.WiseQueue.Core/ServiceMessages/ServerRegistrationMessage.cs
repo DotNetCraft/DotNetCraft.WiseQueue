@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using DotNetCraft.Common.Domain.ServiceMessenger;
+using DotNetCraft.WiseQueue.Core.Models;
 
 namespace DotNetCraft.WiseQueue.Core.ServiceMessages
 {
     public class ServerRegistrationMessage: BaseServiceMessage
     {
-        public int ServerId { get; private set; }
+        public ServerDetails ServerDetails { get; private set; }
 
-        public ServerRegistrationMessage(int serverId, object sender) : base(sender)
+        public ServerRegistrationMessage(ServerDetails serverDetails,  object sender) : base(sender)
         {
-            if (serverId <= 0)
-                throw new ArgumentOutOfRangeException(nameof(serverId));
+            if (serverDetails == null)
+                throw new ArgumentNullException(nameof(serverDetails));
 
-            ServerId = serverId;
+            ServerDetails = serverDetails;
         }
     }
 }

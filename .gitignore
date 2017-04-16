@@ -13,3 +13,13 @@ src/Implementation/DotNetCraft.WiseQueue.Server/bin/
 src/Implementation/DotNetCraft.WiseQueue.Server/obj/
 src/Implementation/DotNetCraft.WiseQueue.MicrosoftExpressionCache/bin/
 src/Implementation/DotNetCraft.WiseQueue.MicrosoftExpressionCache/obj/
+src/PerformanceTests/PerformanceTestCommon/bin/
+src/PerformanceTests/PerformanceTestCommon/obj/
+src/PerformanceTests/Client/obj/
+src/PerformanceTests/Client/bin/
+src/PerformanceTests/Server/bin/
+src/Implementation/DotNetCraft.WiseQueue.Domain.Common/obj/
+src/Implementation/DotNetCraft.WiseQueue.Domain.Common/bin/
+src/Implementation/DotNetCraft.WiseQueue.Domain.Client/obj/
+src/PerformanceTests/Server/obj/
+src/Implementation/DotNetCraft.WiseQueue.Domain.Client/bin/

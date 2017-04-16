@@ -63,7 +63,9 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
         protected override void OnUpdate<TEntity>(TEntity entity)
         {
             var dbSet = dbContext.Set<TEntity>();
-            dbSet.Attach(entity);
+
+            dbContext.Entry(entity).State = EntityState.Modified;
+            //dbSet.Attach(entity);
         }
 
         protected override void OnDelete<TEntity>(object entityId)
@@ -81,7 +83,7 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
 
         protected override void OnBeginTransaction()
         {
-            transactionScope = new TransactionScope();
+            transactionScope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.RepeatableRead});
         }
 
         protected override void OnCommit()
