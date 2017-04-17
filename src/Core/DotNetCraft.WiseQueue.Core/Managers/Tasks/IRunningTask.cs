@@ -5,6 +5,8 @@ namespace DotNetCraft.WiseQueue.Core.Managers.Tasks
 {
     public interface IRunningTask
     {
+        int TaskId { get; }
+
         EventHandler<TaskInfo> OnCompletedEventHandler { get; set; }
 
         /// <summary>

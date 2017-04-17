@@ -22,6 +22,14 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
 
         private CancellationTokenSource taskCancelTokenSource;
 
+        public int TaskId
+        {
+            get
+            {
+                return taskInfo.Id;
+            }
+        }
+
         public RunningTask(TaskInfo taskInfo, object instance, MethodInfo method, Type[] argumentTypes, object[] arguments)
         {
             if (taskInfo == null) throw new ArgumentNullException(nameof(taskInfo));
@@ -40,7 +48,7 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
         }
 
         #region Implementation of IRunningTask
-
+        
         public EventHandler<TaskInfo> OnCompletedEventHandler { get; set; }
 
         /// <summary>

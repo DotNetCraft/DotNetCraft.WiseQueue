@@ -1,4 +1,5 @@
-﻿using DotNetCraft.WiseQueue.Core.Entities.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using DotNetCraft.WiseQueue.Core.Entities.Enums;
 
 namespace DotNetCraft.WiseQueue.Core.Entities
 {
@@ -48,6 +49,9 @@ namespace DotNetCraft.WiseQueue.Core.Entities
         /// Count of attempts that will be used for reruning this task after its crashed.
         /// </summary>
         public int RepeatCrashCount { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
         #endregion
 

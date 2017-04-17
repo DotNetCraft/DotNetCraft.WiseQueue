@@ -19,6 +19,7 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
     public class TaskManager: BaseBackgroundManager<TaskManagerConfiguration>, ITaskManager, IServiceMessageHandler
     {
         private readonly ITaskRepository taskRepository;
+        private readonly ITaskBuilder taskBuilder;
         private readonly ITaskProcessing taskProcessing;
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
         private readonly IContextSettings contextSettings;
@@ -28,10 +29,11 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
 
         public Guid ServiceMessageHandlerId { get; }
 
-        public TaskManager(ITaskRepository taskRepository, ITaskProcessing taskProcessing, IServiceMessageProcessor serviceMessageProcessor, IUnitOfWorkFactory unitOfWorkFactory, IContextSettings contextSettings, TaskManagerConfiguration managerConfiguration) : base(managerConfiguration)
+        public TaskManager(ITaskRepository taskRepository, ITaskBuilder taskBuilder, ITaskProcessing taskProcessing, IServiceMessageProcessor serviceMessageProcessor, IUnitOfWorkFactory unitOfWorkFactory, IContextSettings contextSettings, TaskManagerConfiguration managerConfiguration) : base(managerConfiguration)
         {
             if (taskRepository == null)
                 throw new ArgumentNullException(nameof(taskRepository));
+            if (taskBuilder == null) throw new ArgumentNullException(nameof(taskBuilder));
             if (taskProcessing == null) throw new ArgumentNullException(nameof(taskProcessing));
             if (serviceMessageProcessor == null)
                 throw new ArgumentNullException(nameof(serviceMessageProcessor));
@@ -41,6 +43,7 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                 throw new ArgumentNullException(nameof(contextSettings));
 
             this.taskRepository = taskRepository;
+            this.taskBuilder = taskBuilder;
             this.taskProcessing = taskProcessing;
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.contextSettings = contextSettings;
@@ -76,6 +79,8 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                 currentServerId = serverDetails.ServerId;
             }
 
+            Queue<IRunningTask> runningTasks = new Queue<IRunningTask>();
+            Queue<int> cancelQueueTasks = new Queue<int>();
             lock (syncObject)
             {
                 using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork(contextSettings))
@@ -90,16 +95,16 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                     {
                         try
                         {
-                            taskProcessing.CancelTask(taskInfo);
-                            taskInfo.ServerId = currentServerId;
-                            taskInfo.TaskState = TaskStates.Cancelled;
+                            cancelQueueTasks.Enqueue(taskInfo.Id);                            
+                            //taskInfo.ServerId = currentServerId;
+                            //taskInfo.TaskState = TaskStates.Cancelled;
                         }
                         catch (Exception ex)
                         {
                             taskInfo.TaskState = TaskStates.Failed;
-                        }
-                        unitOfWork.Update(taskInfo);
-                        needToSave = true;
+                            unitOfWork.Update(taskInfo);
+                            needToSave = true;
+                        }                                                
                     }
 
                     if (taskProcessing.Slots > 0)
@@ -113,7 +118,8 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                         {
                             try
                             {
-                                taskProcessing.RunTask(taskInfo);
+                                IRunningTask runningTask = taskBuilder.Build(taskInfo);
+                                runningTasks.Enqueue(runningTask);
                                 taskInfo.ServerId = currentServerId;
                                 taskInfo.TaskState = TaskStates.Running;
                             }
@@ -130,6 +136,18 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                     if (needToSave)
                         unitOfWork.Commit();
                 }
+            }
+
+            while (runningTasks.Count > 0)
+            {
+                IRunningTask runningTask = runningTasks.Dequeue();
+                taskProcessing.RunTask(runningTask);
+            }
+
+            while (cancelQueueTasks.Count > 0)
+            {
+                int taskId = cancelQueueTasks.Dequeue();
+                taskProcessing.CancelTask(taskId);
             }
         }
 

@@ -7,9 +7,9 @@ namespace DotNetCraft.WiseQueue.Core.Managers.Tasks
     {
         int Slots { get; }
 
-        void RunTask(TaskInfo taskInfo);
+        void RunTask(IRunningTask taskInfo);
 
-        void CancelTask(TaskInfo taskInfo);
+        void CancelTask(int taskId);
 
         EventHandler<TaskInfo> OnTaskProcessed { get; set; }        
     }

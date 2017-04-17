@@ -30,27 +30,25 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
         #region Implementation of ITaskProcessing
 
         
-        public void RunTask(TaskInfo taskInfo)
+        public void RunTask(IRunningTask runningTask)
         {
-            IRunningTask runningTask = taskBuilder.Build(taskInfo);
-            runningTask.OnCompletedEventHandler += OnCompletedEventHandler;
-
             lock (RunningTasks)
             {
-                RunningTasks.Add(taskInfo.Id, runningTask);
+                RunningTasks.Add(runningTask.TaskId, runningTask);
             }
-            Interlocked.Decrement(ref slots);
 
-            runningTask.Execute();            
+            runningTask.OnCompletedEventHandler += OnCompletedEventHandler;
+            Interlocked.Decrement(ref slots);
+            runningTask.Execute();
         }
 
-        public void CancelTask(TaskInfo taskInfo)
+        public void CancelTask(int taskId)
         {
             IRunningTask task;
             lock (RunningTasks)
             {
-                if (RunningTasks.TryGetValue(taskInfo.Id, out task))
-                    RunningTasks.Remove(taskInfo.Id);
+                if (RunningTasks.TryGetValue(taskId, out task))
+                    RunningTasks.Remove(taskId);
             }
 
             if (task != null)

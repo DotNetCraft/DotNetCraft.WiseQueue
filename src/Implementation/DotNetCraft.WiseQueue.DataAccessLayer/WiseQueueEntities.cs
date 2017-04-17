@@ -20,7 +20,13 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
         {            
         }
 
-        
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<TaskInfo>().Property(p => p.RowVersion).IsConcurrencyToken();
+        }
+
+
         public virtual DbSet<ServerInfo> ServerInfoSet { get; set; }
 
         public virtual DbSet<TaskInfo> TaskInfoSet { get; set; }
