@@ -62,7 +62,6 @@ namespace Client
 
             for (int i = 0; i < count; i++)
             {
-
                 //Insert a new task.
                 IClientManager clientManager = kernel.Get<IClientManager>();
                 int taskId = clientManager.StartTask(() => new PerformanceObject().Execute(clientName));

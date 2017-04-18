@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using DotNetCraft.WiseQueue.Core.Entities.Enums;
 
 namespace DotNetCraft.WiseQueue.Core.Entities
@@ -50,8 +51,14 @@ namespace DotNetCraft.WiseQueue.Core.Entities
         /// </summary>
         public int RepeatCrashCount { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+        public DateTime LastModified { get; set; }
+
         [Timestamp]
         public byte[] RowVersion { get; set; }
+
+        public int ScheduleInfoId { get; set; }
+        public DateTime ExecuteAt { get; set; }
 
         #endregion
 

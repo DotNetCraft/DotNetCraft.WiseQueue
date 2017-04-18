@@ -1,4 +1,6 @@
-﻿namespace PerformanceTestCommon
+﻿using System;
+
+namespace PerformanceTestCommon
 {
     public class PerformanceObject
     {
@@ -13,6 +15,8 @@
                 context.MyEntities.Add(myEntity);
                 context.SaveChanges();
             }
+
+            //throw new Exception("Just an exception");
         }
     }
 }

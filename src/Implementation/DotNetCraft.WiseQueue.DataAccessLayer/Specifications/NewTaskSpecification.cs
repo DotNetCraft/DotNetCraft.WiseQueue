@@ -24,7 +24,7 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer.Specifications
 
         public Expression<Func<TaskInfo, bool>> IsSatisfiedBy()
         {
-            return x => x.TaskState == TaskStates.New && queueNames.Contains(x.QueueName);
+            return x => x.TaskState == TaskStates.New && x.ExecuteAt <= DateTime.UtcNow && queueNames.Contains(x.QueueName);
         }
 
         #endregion

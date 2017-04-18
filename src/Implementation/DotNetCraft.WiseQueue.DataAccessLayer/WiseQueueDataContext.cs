@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Linq;
-using System.Transactions;
 using DotNetCraft.Common.DataAccessLayer;
 using DotNetCraft.WiseQueue.Core.Configurations;
 
 namespace DotNetCraft.WiseQueue.DataAccessLayer
 {
     public class WiseQueueDataContext : BaseDataContext
-
     {
         private readonly DbContext dbContext;
-        private TransactionScope transactionScope;
 
         public WiseQueueDataContext(WiseQueueDataContextFactory owner, SqlSettings sqlSettings): base(owner)
         {
@@ -38,11 +35,6 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
             if (isDisposing)
             {
                 dbContext.Dispose();
-                if (transactionScope != null)
-                {
-                    transactionScope.Dispose();
-                    transactionScope = null;
-                }
             }
         }
 
@@ -62,15 +54,12 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
 
         protected override void OnUpdate<TEntity>(TEntity entity)
         {
-            var dbSet = dbContext.Set<TEntity>();
-
-            dbContext.Entry(entity).State = EntityState.Modified;
-            //dbSet.Attach(entity);
+            dbContext.Entry(entity).State = EntityState.Modified;            
         }
 
         protected override void OnDelete<TEntity>(object entityId)
         {
-            var entity = Activator.CreateInstance<TEntity>();
+            var entity = Activator.CreateInstance<TEntity>(); //TODO: Where is ID???
             OnDelete(entity);
         }
 
@@ -83,19 +72,18 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
 
         protected override void OnBeginTransaction()
         {
-            transactionScope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.RepeatableRead});
+            dbContext.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
         }
 
         protected override void OnCommit()
         {
             dbContext.SaveChanges();
-            transactionScope.Complete();
+            dbContext.Database.CurrentTransaction.Commit();
         }
 
         protected override void OnRollBack()
         {
-            transactionScope.Dispose();
-            transactionScope = null;
+            dbContext.Database.CurrentTransaction.Rollback();
         }
     }
 }

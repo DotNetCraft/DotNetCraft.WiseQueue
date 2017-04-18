@@ -18,6 +18,7 @@ using DotNetCraft.WiseQueue.DataAccessLayer;
 using DotNetCraft.WiseQueue.DataAccessLayer.Repositories;
 using DotNetCraft.WiseQueue.Domain.Client;
 using DotNetCraft.WiseQueue.Domain.Common.Converters;
+using DotNetCraft.WiseQueue.Domain.Common.Schedules;
 using DotNetCraft.WiseQueue.Domain.Server;
 using DotNetCraft.WiseQueue.Domain.Server.Tasks;
 using DotNetCraft.WiseQueue.MicrosoftExpressionCache;
@@ -77,6 +78,7 @@ namespace DotNetCraft.WiseQueue.Server
             //DataAccessLayer
             kernel.Bind<IServerRepository>().To<ServerRepository>().InSingletonScope();
             kernel.Bind<ITaskRepository>().To<TaskRepository>().InSingletonScope();
+            kernel.Bind<IScheduleRepository>().To<ScheduleRepository>().InSingletonScope();
 
             //UnitOfWork
             kernel.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InSingletonScope();
@@ -106,7 +108,7 @@ namespace DotNetCraft.WiseQueue.Server
 
             //Insert a new task.
             IClientManager clientManager = kernel.Get<IClientManager>();
-            int taskId = clientManager.StartTask(() => new MyClass().ExceptionTask());
+            int taskId = clientManager.StartTask(() => new MyClass().Test("Hi"), new IntervalSchedule());
             //taskId = clientManager.StartTask(systemConfiguration.ServerManagerConfiguration.Queues[0], () => new MyClass().Test("Hi there"));
             //int taskId = clientManager.StartTask(systemConfiguration.ServerManagerConfiguration.Queues[1], () => new MyClass().VerySlowTask("Slow task", CancellationToken.None));
 

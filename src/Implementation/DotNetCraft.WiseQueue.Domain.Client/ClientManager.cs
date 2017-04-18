@@ -8,7 +8,10 @@ using DotNetCraft.WiseQueue.Core.Converters;
 using DotNetCraft.WiseQueue.Core.Entities;
 using DotNetCraft.WiseQueue.Core.Entities.Enums;
 using DotNetCraft.WiseQueue.Core.Managers;
+using DotNetCraft.WiseQueue.Core.Managers.Tasks;
 using DotNetCraft.WiseQueue.Core.Repositories;
+using DotNetCraft.WiseQueue.Domain.Common;
+using DotNetCraft.WiseQueue.Domain.Common.Schedules;
 
 namespace DotNetCraft.WiseQueue.Domain.Client
 {
@@ -54,10 +57,33 @@ namespace DotNetCraft.WiseQueue.Domain.Client
         /// <summary>
         /// Start new <c>task</c>.
         /// </summary>
+        /// <param name="task">The <see cref="Expression"/> instance.</param>
+        /// <param name="scheduleData">Schedule</param>
+        /// <returns>The task's identifier.</returns>
+        public int StartTask(Expression<Action> task, IScheduleData scheduleData)
+        {
+            return StartTask(defaultQueueName, task, scheduleData);
+        }
+
+        /// <summary>
+        /// Start new <c>task</c>.
+        /// </summary>
         /// <param name="queueName">The queue's name.</param>
         /// <param name="task">The <see cref="Expression"/> instance.</param>
         /// <returns>The task's identifier.</returns>
         public int StartTask(string queueName, Expression<Action> task)
+        {
+            return StartTask(defaultQueueName, task, new ImmediatelySchedule());
+        }
+
+        /// <summary>
+        /// Start new <c>task</c>.
+        /// </summary>
+        /// <param name="queueName">The queue's name.</param>
+        /// <param name="task">The <see cref="Expression"/> instance.</param>
+        /// <param name="scheduleData">Schedule</param>
+        /// <returns>The task's identifier.</returns>
+        public int StartTask(string queueName, Expression<Action> task, IScheduleData scheduleData)
         {
             using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork(contextSettings))
             {
@@ -73,8 +99,33 @@ namespace DotNetCraft.WiseQueue.Domain.Client
                     ParametersTypes = jsonConverter.ConvertToJson(activationData.ArgumentTypes),
                     Arguments = jsonConverter.ConvertToJson(args),
                     TaskState = TaskStates.New,
+                    CreatedAt = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow,
+                    ExecuteAt = DateTime.UtcNow,
                     RepeatCrashCount = 3 //TODO: Settings
                 };
+
+                switch (scheduleData.ScheduleType)
+                {
+                    case ScheduleType.Immediately:
+                    case ScheduleType.ExecuteAt:
+                    {
+                        entity.ScheduleInfoId = -1;
+                        break;
+                    }
+                    default:
+                    {
+                        ScheduleInfo scheduleInfo = new ScheduleInfo
+                        {
+                            ScheduleType = scheduleData.ScheduleType,
+                            ScheduleData = jsonConverter.ConvertToJson(scheduleData),
+                            ScheduleDataType = jsonConverter.ConvertToJson(scheduleData.GetType())
+                        };
+                        unitOfWork.Insert(scheduleInfo);
+                        entity.ScheduleInfoId = scheduleInfo.Id;
+                        break;
+                    }
+                }
 
                 unitOfWork.Insert(entity);
                 unitOfWork.Commit();
@@ -91,10 +142,21 @@ namespace DotNetCraft.WiseQueue.Domain.Client
         {
             using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork(contextSettings))
             {
-                TaskInfo taskInfo = taskRepository.Get(taskId);
-                taskInfo.TaskState = TaskStates.Cancelling;
-                unitOfWork.Update(taskInfo);
-                unitOfWork.Commit();
+                int attemts = 3;
+                while (attemts-- > 0)
+                {
+                    try
+                    {
+                        TaskInfo taskInfo = taskRepository.Get(taskId);
+                        taskInfo.TaskState = TaskStates.Cancelling;
+                        unitOfWork.Update(taskInfo);
+                        unitOfWork.Commit();
+                        break;
+                    }
+                    catch (Exception exception)
+                    {
+                    }
+                }
             }
         }
 
