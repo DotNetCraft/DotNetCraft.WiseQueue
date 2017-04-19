@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.Core.Domain.ServiceMessenger;
 using DotNetCraft.Common.Domain.Management;
@@ -10,6 +12,7 @@ using DotNetCraft.WiseQueue.Core.Converters;
 using DotNetCraft.WiseQueue.Core.Entities;
 using DotNetCraft.WiseQueue.Core.Entities.Enums;
 using DotNetCraft.WiseQueue.Core.Managers.Tasks;
+using DotNetCraft.WiseQueue.Core.Managers.Tasks.ScheduleStrategy;
 using DotNetCraft.WiseQueue.Core.Models;
 using DotNetCraft.WiseQueue.Core.Repositories;
 using DotNetCraft.WiseQueue.Core.ServiceMessages;
@@ -28,7 +31,7 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
         private readonly IContextSettings contextSettings;
         private ServerDetails serverDetails;
 
-        private readonly Queue<TaskInfo> readyTasks = new Queue<TaskInfo>();
+        private readonly ConcurrentQueue<TaskInfo> readyTasks = new ConcurrentQueue<TaskInfo>();
 
         private readonly object syncObject = new object();
 
@@ -65,6 +68,8 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
 
         private void OnTaskProcessed(object sender, TaskInfo taskInfo)
         {
+            if (taskInfo == null)
+                return;
             readyTasks.Enqueue(taskInfo);
             base.ForceRun("New task has been completed");
         }
@@ -110,16 +115,19 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
             {
                 while (readyTasks.Count > 0)
                 {
-                    var taskInfo = readyTasks.Dequeue();
+                    TaskInfo taskInfo;
+                    if (readyTasks.TryDequeue(out taskInfo) == false)
+                    {
+                        continue;
+                    }
                     taskInfo.ServerId = currentServerId;
-                    taskInfo.LastModified = DateTime.UtcNow;
                     unitOfWork.Update(taskInfo);
 
                     if (taskInfo.ScheduleInfoId > 0)
                     {
                         var scheduleInfo = scheduleRepository.Get(taskInfo.ScheduleInfoId);
                         Type type = jsonConverter.ConvertFromJson<Type>(scheduleInfo.ScheduleDataType);
-                        IScheduleData scheduleData = (IScheduleData)jsonConverter.ConvertFromJson(scheduleInfo.ScheduleData, type);
+                        IScheduleStrategy scheduleStrategy = (IScheduleStrategy)jsonConverter.ConvertFromJson(scheduleInfo.ScheduleData, type);
 
                         TaskInfo entity = new TaskInfo
                         {
@@ -129,10 +137,8 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                             ParametersTypes = taskInfo.ParametersTypes,
                             Arguments = taskInfo.Arguments,
                             TaskState = TaskStates.New,
-                            CreatedAt = DateTime.UtcNow,
-                            LastModified = DateTime.UtcNow,
                             ScheduleInfoId = taskInfo.ScheduleInfoId,
-                            ExecuteAt = scheduleData.GetNextExecutionTime(),
+                            ExecuteAt = scheduleStrategy.GetNextExecutionTime(taskInfo.ExecuteAt, taskInfo.TaskState),
                             RepeatCrashCount = 3 //TODO: Settings
                         };
                         unitOfWork.Insert(entity, false);
@@ -149,11 +155,47 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                 Queue<IRunningTask> runningTasks = new Queue<IRunningTask>();
                 using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork(contextSettings))
                 {
-                    ISpecificationRequest<TaskInfo> specification = new SimpleSpecificationRequest<TaskInfo>();
-                    //Retrieving new tasks...
-                    specification.Take = taskProcessing.Slots;
-                    specification.Specification = new NewTaskSpecification(serverDetails.QueueNames);
-                    ICollection<TaskInfo> tasks = taskRepository.GetBySpecification(specification);
+                    //TODO: Queues
+                    ICollection<TaskInfo> tasks = unitOfWork.ExecuteQuery<TaskInfo>(@"
+                                       UPDATE TOP (@MaxRows) [DotNetCraftWiseQueue].[dbo].[TaskInfoes]
+			                                SET [TaskState] = @UpdatedTaskState,
+				                                [ServerId] = @ServerId
+			                                OUTPUT inserted.*
+			                                Where ( [ServerId] = 0 
+					                                AND [TaskState] = @NewTask
+					                                AND [QueueName] in (@QueueName)
+					                                AND [ExecuteAt] <= @ExecuteAt 
+					                                AND [RepeatCrashCount] > 0);",
+                                                    new DataBaseParameter
+                                                    {
+                                                        ParameterName = "@MaxRows",
+                                                        ParameterValue = taskProcessing.Slots
+                                                    },
+                                                    new DataBaseParameter
+                                                    {
+                                                        ParameterName = "@UpdatedTaskState",
+                                                        ParameterValue = TaskStates.Running
+                                                    },
+                                                    new DataBaseParameter
+                                                    {
+                                                        ParameterName = "@ServerId",
+                                                        ParameterValue = currentServerId
+                                                    },
+                                                    new DataBaseParameter
+                                                    {
+                                                        ParameterName = "@NewTask",
+                                                        ParameterValue = TaskStates.New
+                                                    },
+                                                    new DataBaseParameter
+                                                    {
+                                                        ParameterName = "@ExecuteAt",
+                                                        ParameterValue = DateTime.UtcNow
+                                                    },
+                                                    new DataBaseParameter
+                                                    {
+                                                        ParameterName = "@QueueName",
+                                                        ParameterValue = "default"
+                                                    });
 
                     foreach (TaskInfo taskInfo in tasks)
                     {
@@ -169,6 +211,15 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
                             taskInfo.ServerId = currentServerId;
                             taskInfo.TaskState = TaskStates.Failed;
                         }
+
+                        if (taskInfo.ScheduleInfoId > 0)
+                        {
+                            ScheduleInfo scheduleInfo = scheduleRepository.Get(taskInfo.ScheduleInfoId);
+                            Type type = jsonConverter.ConvertFromJson<Type>(scheduleInfo.ScheduleDataType);
+                            IScheduleStrategy scheduleStrategy = (IScheduleStrategy)jsonConverter.ConvertFromJson(scheduleInfo.ScheduleData, type);
+                            taskInfo.ExecuteAt = scheduleStrategy.GetNextExecutionTime(taskInfo.ExecuteAt, taskInfo.TaskState);
+                        }                        
+
                         unitOfWork.Update(taskInfo);
                     }
 

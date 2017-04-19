@@ -14,6 +14,8 @@ namespace DotNetCraft.WiseQueue.Core.Entities
         /// <summary>
         /// The queue's identifier where the task will be put.
         /// </summary>
+        [Required]
+        [StringLength(100)]        
         public string QueueName { get; set; }
 
         /// <summary>
@@ -24,40 +26,45 @@ namespace DotNetCraft.WiseQueue.Core.Entities
         /// <summary>
         /// Task's state.
         /// </summary>
+        [Required]
         public TaskStates TaskState { get; set; }
 
         /// <summary>
         /// Information about class that will be used for executing method.
         /// </summary>
+        [Required]
         public string InstanceType { get; set; }
 
         /// <summary>
         /// Information about method that will be executed.
         /// </summary>
+        [Required]
         public string Method { get; set; }
 
         /// <summary>
         /// Parameters' types that are using in the method.
         /// </summary>
+        [Required]
         public string ParametersTypes { get; set; }
 
         /// <summary>
         /// Arguments' values that are using in the method.
         /// </summary>
+        [Required]
         public string Arguments { get; set; }
 
         /// <summary>
         /// Count of attempts that will be used for reruning this task after its crashed.
         /// </summary>
+        [Required]
         public int RepeatCrashCount { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastModified { get; set; }
-
+        
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
         public int ScheduleInfoId { get; set; }
+
+        [Required]
         public DateTime ExecuteAt { get; set; }
 
         #endregion

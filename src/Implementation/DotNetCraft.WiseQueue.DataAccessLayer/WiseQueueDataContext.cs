@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.DataAccessLayer;
 using DotNetCraft.WiseQueue.Core.Configurations;
 
@@ -68,6 +73,43 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
             var dbSet = dbContext.Set<TEntity>();
             dbSet.Attach(entity);
             dbSet.Remove(entity);
+        }
+
+        protected override ICollection<TEntity> OnExecuteQuery<TEntity>(string query, DataBaseParameter[] args)
+        {
+            ICollection<TEntity> result;
+            
+            if (args != null && args.Length > 0)
+            {
+                object[] parameters = new SqlParameter[args.Length];
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    DataBaseParameter dataBaseParameter = args[i];
+                    string parameterName = dataBaseParameter.ParameterName;
+
+                    Type argumentType = dataBaseParameter.ParameterValue.GetType();
+
+                    SqlDbType dbType = SqlDbType.Int;
+
+                    if (argumentType == typeof(string))
+                        dbType = SqlDbType.NVarChar;
+                    if (argumentType == typeof(DateTime))
+                        dbType = SqlDbType.DateTime;
+
+                    parameters[i] = new SqlParameter(parameterName, dbType)
+                    {
+                        Value = dataBaseParameter.ParameterValue
+                    };
+                }
+                
+                result = dbContext.Database.SqlQuery<TEntity>(query, parameters).ToList();
+            }
+            else
+            {
+                result = dbContext.Database.SqlQuery<TEntity>(query).ToList();
+            }
+
+            return result;
         }
 
         protected override void OnBeginTransaction()

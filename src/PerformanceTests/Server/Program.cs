@@ -43,6 +43,7 @@ namespace Server
             //DataAccessLayer
             kernel.Bind<IServerRepository>().To<ServerRepository>().InSingletonScope();
             kernel.Bind<ITaskRepository>().To<TaskRepository>().InSingletonScope();
+            kernel.Bind<IScheduleRepository>().To<ScheduleRepository>().InSingletonScope();
 
             //UnitOfWork
             kernel.Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InSingletonScope();

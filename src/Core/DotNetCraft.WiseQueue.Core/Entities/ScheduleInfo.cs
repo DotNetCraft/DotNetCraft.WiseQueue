@@ -1,5 +1,6 @@
 ﻿using System;
 using DotNetCraft.WiseQueue.Core.Managers.Tasks;
+using DotNetCraft.WiseQueue.Core.Managers.Tasks.ScheduleStrategy;
 
 namespace DotNetCraft.WiseQueue.Core.Entities
 {
