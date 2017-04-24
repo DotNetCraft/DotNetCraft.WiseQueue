@@ -29,6 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTestCommon", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "src\PerformanceTests\Server\Server.csproj", "{58A2CDD1-A484-47E5-840F-A17D8163AAE1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6250500D-811F-43F6-9926-07965018CF21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayerTests", "src\Tests\DataAccessLayerTests\DataAccessLayerTests.csproj", "{48A4F308-278C-45DD-8187-32952D544A6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +79,10 @@ Global
 		{58A2CDD1-A484-47E5-840F-A17D8163AAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58A2CDD1-A484-47E5-840F-A17D8163AAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58A2CDD1-A484-47E5-840F-A17D8163AAE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48A4F308-278C-45DD-8187-32952D544A6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48A4F308-278C-45DD-8187-32952D544A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48A4F308-278C-45DD-8187-32952D544A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48A4F308-278C-45DD-8187-32952D544A6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,5 +98,6 @@ Global
 		{A6D71204-BEDB-4976-8E46-863ABB5DFC96} = {00880E7A-64B6-4A87-8DD0-341CAC1D4901}
 		{4801A871-1272-4D68-B249-658706FB83F4} = {00880E7A-64B6-4A87-8DD0-341CAC1D4901}
 		{58A2CDD1-A484-47E5-840F-A17D8163AAE1} = {00880E7A-64B6-4A87-8DD0-341CAC1D4901}
+		{48A4F308-278C-45DD-8187-32952D544A6B} = {6250500D-811F-43F6-9926-07965018CF21}
 	EndGlobalSection
 EndGlobal

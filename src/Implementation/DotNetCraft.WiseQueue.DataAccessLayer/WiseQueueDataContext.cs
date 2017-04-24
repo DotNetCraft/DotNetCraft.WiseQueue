@@ -114,7 +114,7 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
 
         protected override void OnBeginTransaction()
         {
-            dbContext.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+            dbContext.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
         }
 
         protected override void OnCommit()
