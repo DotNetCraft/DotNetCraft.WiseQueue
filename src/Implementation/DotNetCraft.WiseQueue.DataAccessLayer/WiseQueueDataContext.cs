@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.DataAccessLayer;
+using DotNetCraft.Common.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.WiseQueue.Core.Configurations;
 
 namespace DotNetCraft.WiseQueue.DataAccessLayer
@@ -75,7 +76,7 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
             dbSet.Remove(entity);
         }
 
-        protected override ICollection<TEntity> OnExecuteQuery<TEntity>(string query, DataBaseParameter[] args)
+        protected override ICollection<TEntity> OnExecuteQuery<TEntity>(string query, IDataBaseParameter[] args)
         {
             ICollection<TEntity> result;
             
@@ -84,7 +85,7 @@ namespace DotNetCraft.WiseQueue.DataAccessLayer
                 object[] parameters = new SqlParameter[args.Length];
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    DataBaseParameter dataBaseParameter = args[i];
+                    IDataBaseParameter dataBaseParameter = args[i];
                     string parameterName = dataBaseParameter.ParameterName;
 
                     Type argumentType = dataBaseParameter.ParameterValue.GetType();

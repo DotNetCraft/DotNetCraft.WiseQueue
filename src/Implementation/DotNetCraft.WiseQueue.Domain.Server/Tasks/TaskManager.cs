@@ -2,10 +2,11 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
+using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.Core.Domain.ServiceMessenger;
+using DotNetCraft.Common.DataAccessLayer.Specifications;
+using DotNetCraft.Common.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Domain.Management;
 using DotNetCraft.WiseQueue.Core.Configurations;
 using DotNetCraft.WiseQueue.Core.Converters;
@@ -61,7 +62,7 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
             this.contextSettings = contextSettings;
 
             ServiceMessageHandlerId = Guid.NewGuid();
-            serviceMessageProcessor.RegisteredWaitHandle(this);
+            serviceMessageProcessor.RegisteredServiceMessageHandler(this);
 
             taskProcessing.OnTaskProcessed += OnTaskProcessed;
         }
@@ -81,10 +82,9 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
             Queue<int> cancelQueueTasks = new Queue<int>();
             using (IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork(contextSettings))
             {
-                ISpecificationRequest<TaskInfo> specification = new SimpleSpecificationRequest<TaskInfo>();
+                IDataRequest<TaskInfo> specification = new DataRequest<TaskInfo>(new TaskCancellationSpecification(currentServerId));
                 //Retrieving tasks for cancellation...
                 specification.Take = 10;
-                specification.Specification = new TaskCancellationSpecification(currentServerId);
                 ICollection<TaskInfo> tasks = taskRepository.GetBySpecification(specification);
                 foreach (TaskInfo taskInfo in tasks)
                 {
@@ -166,36 +166,12 @@ namespace DotNetCraft.WiseQueue.Domain.Server.Tasks
 					                                AND [QueueName] in (@QueueName)
 					                                AND [ExecuteAt] <= @ExecuteAt 
 					                                AND [RepeatCrashCount] > 0);",
-                                                    new DataBaseParameter
-                                                    {
-                                                        ParameterName = "@MaxRows",
-                                                        ParameterValue = taskProcessing.Slots
-                                                    },
-                                                    new DataBaseParameter
-                                                    {
-                                                        ParameterName = "@UpdatedTaskState",
-                                                        ParameterValue = TaskStates.Running
-                                                    },
-                                                    new DataBaseParameter
-                                                    {
-                                                        ParameterName = "@ServerId",
-                                                        ParameterValue = currentServerId
-                                                    },
-                                                    new DataBaseParameter
-                                                    {
-                                                        ParameterName = "@NewTask",
-                                                        ParameterValue = TaskStates.New
-                                                    },
-                                                    new DataBaseParameter
-                                                    {
-                                                        ParameterName = "@ExecuteAt",
-                                                        ParameterValue = DateTime.UtcNow
-                                                    },
-                                                    new DataBaseParameter
-                                                    {
-                                                        ParameterName = "@QueueName",
-                                                        ParameterValue = "default"
-                                                    });
+                                                    new DataBaseParameter("@MaxRows", taskProcessing.Slots),
+                                                    new DataBaseParameter("@UpdatedTaskState", TaskStates.Running),
+                                                    new DataBaseParameter("@ServerId", currentServerId),
+                                                    new DataBaseParameter("@NewTask", TaskStates.New),
+                                                    new DataBaseParameter("@ExecuteAt", DateTime.UtcNow),
+                                                    new DataBaseParameter("@QueueName", "default"));
 
                     foreach (TaskInfo taskInfo in tasks)
                     {

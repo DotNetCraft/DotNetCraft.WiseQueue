@@ -27,7 +27,7 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            ServerConfiguration systemConfiguration = (ServerConfiguration)(dynamic)ConfigurationManager.GetSection("ServerConfiguration");
+            ServerConfiguration systemConfiguration = (ServerConfiguration)ConfigurationManager.GetSection("ServerConfiguration");
             Console.WriteLine(systemConfiguration.ToString());
 
             //We decided to use Ninject.

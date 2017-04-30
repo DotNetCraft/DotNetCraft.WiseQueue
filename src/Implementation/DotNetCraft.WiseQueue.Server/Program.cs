@@ -62,7 +62,7 @@ namespace DotNetCraft.WiseQueue.Server
 
         static void Main(string[] args)
         {
-            SystemConfiguration systemConfiguration = (SystemConfiguration)(dynamic)ConfigurationManager.GetSection("SystemConfiguration");
+            SystemConfiguration systemConfiguration = (SystemConfiguration)ConfigurationManager.GetSection("SystemConfiguration");
             Console.WriteLine(systemConfiguration.ToString());
 
             //We decided to use Ninject.

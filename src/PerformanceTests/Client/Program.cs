@@ -30,7 +30,7 @@ namespace Client
             int count = Convert.ToInt32(args[0]);
             string clientName = args[1];
 
-            ClientConfiguration systemConfiguration = (ClientConfiguration)(dynamic)ConfigurationManager.GetSection("ClientConfiguration");
+            ClientConfiguration systemConfiguration = (ClientConfiguration)ConfigurationManager.GetSection("ClientConfiguration");
 
             //We decided to use Ninject.
             IKernel kernel = new StandardKernel();

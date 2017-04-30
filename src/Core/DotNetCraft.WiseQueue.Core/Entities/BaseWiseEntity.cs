@@ -1,5 +1,6 @@
 ﻿using System;
 using DotNetCraft.Common.Core.BaseEntities;
+using DotNetCraft.Common.DataAccessLayer.BaseEntities;
 
 namespace DotNetCraft.WiseQueue.Core.Entities
 {

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
+using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.Core.Domain.ServiceMessenger;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using DotNetCraft.Common.DataAccessLayer.Specifications;
 using DotNetCraft.Common.Domain.Management;
 using DotNetCraft.WiseQueue.Core.Configurations;
 using DotNetCraft.WiseQueue.Core.Entities;
@@ -82,14 +83,12 @@ namespace DotNetCraft.WiseQueue.Domain.Server
 
         private void DeleteExpiredServers(IUnitOfWork unitOfWork)
         {
-            ISpecificationRequest<ServerInfo> specification = new SimpleSpecificationRequest<ServerInfo>();
-            specification.Specification = new ExpiredServerSpecification();
+            IDataRequest<ServerInfo> specification = new DataRequest<ServerInfo>(new ExpiredServerSpecification());
             var servers = serverRepository.GetBySpecification(specification);
             foreach (ServerInfo serverInfo in servers)
             {
                 unitOfWork.Delete(serverInfo);
-                ISpecificationRequest<TaskInfo> taskRequest = new SimpleSpecificationRequest<TaskInfo>();
-                taskRequest.Specification = new RunningTaskByServerIdSpecification(serverInfo.Id);
+                IDataRequest<TaskInfo> taskRequest = new DataRequest<TaskInfo>(new RunningTaskByServerIdSpecification(serverInfo.Id));
                 var tasks = taskRepository.GetBySpecification(taskRequest);
                 foreach (TaskInfo taskInfo in tasks)
                 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
+using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 using DotNetCraft.WiseQueue.Core.Entities;
 using DotNetCraft.WiseQueue.Core.Entities.Enums;
 
