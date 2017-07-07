@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.Core.Domain.ServiceMessenger;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
@@ -13,6 +14,7 @@ using DotNetCraft.WiseQueue.Core.Converters;
 using DotNetCraft.WiseQueue.Core.Managers;
 using DotNetCraft.WiseQueue.Core.Managers.Tasks;
 using DotNetCraft.WiseQueue.Core.Repositories;
+using DotNetCraft.WiseQueue.Core.WiseQueueConfigurations;
 using DotNetCraft.WiseQueue.DataAccessLayer;
 using DotNetCraft.WiseQueue.DataAccessLayer.Repositories;
 using DotNetCraft.WiseQueue.Domain.Common.Converters;
@@ -35,6 +37,16 @@ namespace Server
 
             //NLog
             LogManager.LoggerFactory = new CommonNLogLoggerFactory();
+
+            using (IWiseQueueConfiguration configuration = WiseQueueGlobalConfiguration.WiseQueueConfiguration
+                .UseNLog()
+                .UseSqlServer(connectionString)
+                .UseClient(clientConfiguration))
+            {               
+                Console.WriteLine("All requests have been enqueued.");
+                Console.ReadLine();
+            }
+
 
             //UseEntityFrameWork();
             kernel.Bind<IContextSettings>().ToConstant(systemConfiguration.SqlSettings).InSingletonScope();
